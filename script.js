@@ -16,7 +16,7 @@
    avatar  头像图片（选填，留空 "" 自动用姓名首字生成圆形占位；
            要放图片：把图片放进 assets/ 文件夹，填 "assets/xxx.jpg"） */
 const MEMBERS = [
-  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "无他，無境团队创始人之一，坚持卓越的设计理念。", avatar: "assets/wuta.png" },
+  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "无他，無境团队创始人之一，坚持卓越的设计理念。", avatar: "assets/无他.jpg" },
   { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "风起多意，無境团队创始人之一。", avatar: "assets/fengqiduoyi.jpg" },
   { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b。", avatar: "assets/。.jpg" },
   { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴。", avatar: "assets/shayebuxianggan.jpg" }
