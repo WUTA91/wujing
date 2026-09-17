@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WUJING ·無境——综合创作团队，业务包含视频宣发、网页制作等多类项目。">
+  <title>WUJING ·無境｜综合创作团队</title>
+
+  <!-- 网站图标：内联 SVG 极简 W 字标，如需更换直接改下面的 path 即可 -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%2322262B'/%3E%3Cpath%20d='M6.5%2023%2011%209.5%2016%2017%2021%209.5%2025.5%2023'%20stroke='%23E9ECEF'%20stroke-width='2.4'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- 首屏脚本：1) 给 <html> 加 js 类（控制滚动渐显动画） 2) 提前读取主题避免刷新闪烁 -->
+  <script>
+    document.documentElement.classList.add("js");
+    (function () {
+      var t = localStorage.getItem("wujing-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       顶部导航栏（如需调整导航项文字，改下面 .nav-link 里的中文即可）
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- 左侧：团队商标
+           ★ 更换商标图：把新图片放进 assets/ 文件夹并命名为 logo.jpeg，
+             或直接修改下方 src 的文件名即可 -->
+      <a href="#home" class="logo" aria-label="返回首页">
+        <img src="assets/logo.jpeg" alt="WUJING ·無境" class="logo-img">
+      </a>
+
+      <!-- 中间：导航链接（电脑端横排，移动端折叠为汉堡菜单，由 script.js 控制） -->
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="#home" class="nav-link">首页</a>
+        <a href="#about" class="nav-link">关于我们</a>
+        <a href="#members" class="nav-link">成员</a>
+        <a href="#projects" class="nav-link">项目作品</a>
+        <a href="#announcements" class="nav-link">公告</a>
+        <a href="#contact" class="nav-link">与我们联系</a>
+      </nav>
+
+      <!-- 右侧：深色/浅色切换 + 汉堡按钮 -->
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+          <!-- 太阳图标（浅色模式显示） -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <!-- 月亮图标（深色模式显示） -->
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"></path>
+          </svg>
+        </button>
+
+        <button class="hamburger" id="hamburger" aria-label="打开菜单" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         ① 首页 Hero：背景为 assets/hero-bg.png 壁纸（换图直接替换该文件）
+            主视觉为商标图（替换 assets/logo.jpeg 即换商标）；
+            标语文字、服务条目可在此修改
+         ============================================================ -->
+    <section id="home" class="hero">
+      <div class="container">
+        <!-- 主视觉：商标图（替代原大标题文字） -->
+        <h1 class="hero-logo reveal">
+          <img src="assets/logo.jpeg" alt="WUJING ·無境">
+        </h1>
+        <p class="hero-tagline reveal">综合创作团队，业务覆盖视频宣发、网页制作等多类项目。</p>
+        <div class="hero-services reveal">
+          <span>视频宣发</span><i></i>
+          <span>网页制作</span><i></i>
+          <span>多元创作</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ② 团队介绍：修改文案直接改 <p> 里的文字即可
+         ============================================================ -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>关于 WUJING ·無境</h2>
+        </div>
+        <div class="about-body reveal">
+          <p>「無境」，意为没有边界——创作不应被形式束缚。</p>
+          <p>WUJING ·無境 是一支综合创作团队，由无他与风起多意创立于2025年末。我们致力于极简的设计、卓越的执行，把每一个想法打磨成可交付的极致作品。</p>
+          <p>我们坚持以赤诚之心悉心打磨造就卓越，为我们的用户呈上最好的臻品。我们的目标只有两点：坚持，进步。</p>
+          <p>愿我们的心之理想，永无边界。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ③ 成员列表：卡片由 script.js 中的 MEMBERS 数组自动生成，
+            新增/修改成员请打开 script.js 顶部「数据配置区」
+         ============================================================ -->
+    <section id="members" class="section section-alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>我们的伙伴</h2>
+          <p class="section-sub">团队成员介绍</p>
+        </div>
+        <div class="members-grid" id="membersGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ④ 项目作品：横向滑动卡片区，卡片由 script.js 中的 PROJECTS
+            数组自动生成，点击卡片跳转外部链接；新增项目请编辑该数组
+         ============================================================ -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>项目作品</h2>
+          <p class="section-sub">我们团队的卓越作品</p>
+        </div>
+
+        <div class="projects-wrap reveal">
+          <!-- 左右滚动按钮 + 提示 -->
+          <div class="projects-toolbar">
+            <span class="projects-hint">← 拖动或点击按钮左右滑动浏览 →</span>
+            <div class="track-btns">
+              <button class="track-btn" id="trackPrev" aria-label="向左滚动">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"></path></svg>
+              </button>
+              <button class="track-btn" id="trackNext" aria-label="向右滚动">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 左右渐隐遮罩（提示还有更多卡片，可继续滑动） -->
+          <div class="track-mask left"></div>
+          <!-- 项目卡片横向滚动容器（卡片由 JS 注入） -->
+          <div class="project-track" id="projectTrack"></div>
+          <div class="track-mask right"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ⑤ 公告：内容由 script.js 顶部 ANNOUNCEMENTS 数组管理，
+            新增 / 删除公告请编辑该数组（官网不开放访客发布/删除）
+         ============================================================ -->
+    <section id="announcements" class="section section-alt">
+      <div class="container narrow">
+        <div class="section-head reveal">
+          <h2>公告</h2>
+          <p class="section-sub">关于我们的大小事</p>
+        </div>
+        <ul class="announce-list" id="announceList"></ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ⑥ 联系方式：修改邮箱 / 微信 / 抖音信息就在下面这段
+         ============================================================ -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>联系方式</h2>
+          <p class="section-sub">合作与咨询，我们在听。</p>
+        </div>
+
+        <div class="contact-grid reveal">
+          <!-- 邮箱：改成真实邮箱（同时改 href="mailto:..." 和下面的文字） -->
+          <a class="contact-item" href="mailto:wujingteam@163.com">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+            </span>
+            <span>
+              <h3>邮箱</h3>
+              <p>wujingteam@163.com</p>
+            </span>
+          </a>
+
+          <!-- QQ:QQ交流群号-->
+          <div class="contact-item">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9.3 8.4 8.9 8.9 0 0 1-3.2-.6L4 20.5l1.1-3.6A8.5 8.5 0 1 1 21 11.5z"></path></svg>
+            </span>
+            <span>
+              <h3>QQ</h3>
+              <p>交流群：1040398337</p>
+            </span>
+          </div>
+
+          <!-- 抖音：改成真实账号 -->
+          <div class="contact-item">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"></path><circle cx="6.5" cy="18" r="2.5"></circle><circle cx="16.5" cy="16" r="2.5"></circle></svg>
+            </span>
+            <span>
+              <h3>抖音</h3>
+              <p>@WUJING ·無境</p>
+            </span>
+          </div>
+        </div>
+
+        <!-- 一键联系按钮：邮箱改好后点击即可直接发邮件 -->
+        <div class="contact-cta reveal">
+          <a class="btn" href="wujingteam@163.com">发送邮件联系我们</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       页脚：年份自动更新，无需手动修改
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> WUJING ·無境 · 保留所有权利</p>
+      <a href="#home" class="back-top">回到顶部</a>
+    </div>
+  </footer>
+
+  <!-- 页面逻辑与数据配置（成员 / 项目 / 公告都在里面改） -->
+  <script src="script.js"></script>
+</body>
+</html>
