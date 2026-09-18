@@ -16,10 +16,11 @@
    avatar  头像图片（选填，留空 "" 自动用姓名首字生成圆形占位；
            要放图片：把图片放进 assets/ 文件夹，填 "assets/xxx.jpg"） */
 const MEMBERS = [
-  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "无他，無境团队创始人之一，坚持卓越的设计理念。", avatar: "assets/无他.jpg" },
-  { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "风起多意，無境团队创始人之一。", avatar: "assets/fengqiduoyi.jpg" },
-  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b。", avatar: "assets/。.jpg" },
-  { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴。", avatar: "assets/shayebuxianggan.jpg" }
+  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "高中生一名，無境团队创始人之一，坚持卓越的设计理念", avatar: "assets/无他.jpg" },
+  { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "臭指挥AI的中学生，对数码、网络有兴趣和较浅的研究，“無境”命名创意灵感提供者", avatar: "assets/fengqiduoyi.jpg" },
+  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b", avatar: "assets/。.jpg" },
+  { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴", avatar: "assets/shayebuxianggan.jpg" }
+  { name: "Yarent80", role: "视频宣发", bio: "负责在bilibili发布视频", avatar: "assets/80.jpg" }
 ];
 
 /* ===== 项目作品：每条 {} 是一个项目卡片 =====
@@ -33,7 +34,7 @@ const PROJECTS = [
   {
     title: "Airplane 专注",
     category: "我们的网页",
-    desc: "由無境团队开发的飞行类专注网页，欢迎各位体验。",
+    desc: "由無境团队开发的飞行类专注网页，欢迎各位体验",
     image: "assets/airplan.jpg",
     link: "https://wj-airplane.pages.dev"
   }
@@ -45,7 +46,7 @@ const PROJECTS = [
    date  日期（显示在公告左侧）
    text  公告内容 */
 const ANNOUNCEMENTS = [
-  { date: "2026-09-17", text: "WUJING ·無境 团队官网正式上线，欢迎各界伙伴上线体验。" },
+  { date: "2026-09-17", text: "WUJING ·無境 团队官网正式上线，欢迎各界伙伴上线体验" },
 ];
 
 /* ============================================================
