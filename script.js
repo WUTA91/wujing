@@ -19,7 +19,7 @@ const MEMBERS = [
   { name: "无他", role: "创始人，产品总监，视觉设计", bio: "高中生一名，無境团队创始人之一，坚持卓越的设计理念", avatar: "assets/无他.jpg" },
   { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "臭指挥AI的中学生，对数码、网络有兴趣和较浅的研究，“無境”命名创意灵感提供者", avatar: "assets/fengqiduoyi.jpg" },
   { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b", avatar: "assets/。.jpg" },
-  { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴", avatar: "assets/shayebuxianggan.jpg" }
+  { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴", avatar: "assets/shayebuxianggan.jpg" },
   { name: "Yarent80", role: "视频宣发", bio: "负责在bilibili发布视频", avatar: "assets/80.jpg" }
 ];
 
