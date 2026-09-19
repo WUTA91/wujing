@@ -1,0 +1,2 @@
+https://www.wujingcn.top/*    https://wujingcn.top/:splat    301
+https://wujing.pages.dev/*    https://wujingcn.top/:splat    301
