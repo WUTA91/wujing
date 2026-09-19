@@ -760,7 +760,10 @@ html[data-theme="dark"] .hero-logo img {
 
 .contact-cta {
   margin-top: 34px;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
 }
 
 .btn {
@@ -776,6 +779,55 @@ html[data-theme="dark"] .hero-logo img {
 
 .btn:hover {
   opacity: 0.88;
+}
+
+/* —— QQ 加群：双按钮 + QQ 卡片右侧企鹅徽章 / 「点击加入」提示 —— */
+.btn-qq {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-qq svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* QQ 联系卡片：整卡可点击跳转加群 */
+.contact-join {
+  cursor: pointer;
+}
+
+.qq-join {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.join-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.join-hint svg {
+  width: 11px;
+  height: 11px;
+  transition: transform 0.2s ease;
+}
+
+.contact-join:hover .join-hint {
+  color: var(--text);
+}
+
+.contact-join:hover .join-hint svg {
+  transform: translateX(2px);
 }
 
 /* ========== 12 页脚 ========== */
