@@ -257,3 +257,43 @@ revealEls.forEach(function (el) {
 
 /* ---------- 页脚年份自动更新 ---------- */
 document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ---------- 背景音乐 ----------
+   策略：浏览器禁止无手势自动出声，所以进页面先不响；
+   访客第一次点击 / 滚动 / 按键后自动开始播放；
+   右下角按钮随时暂停 / 继续；上次的开关状态记在 localStorage。 */
+const bgm = document.getElementById("bgm");
+const musicToggle = document.getElementById("musicToggle");
+
+function kickoffBgm() {
+  if (!bgm) return;
+  if (!bgm.paused) return;
+  /* 用户上次明确关过，就不自动播 */
+  if (localStorage.getItem("wujing-bgm") === "off") return;
+  bgm.play().catch(function () {});
+}
+
+/* 首次用户交互即尝试自动播放 */
+["pointerdown", "touchstart", "scroll", "keydown"].forEach(function (evt) {
+  window.addEventListener(evt, kickoffBgm, { once: true, passive: true });
+});
+
+/* 按钮手动切换 */
+musicToggle.addEventListener("click", function (e) {
+  e.stopPropagation();
+  if (bgm.paused) {
+    bgm.play().catch(function () {});
+  } else {
+    bgm.pause();
+  }
+});
+
+/* 播放 / 暂停同步按钮图标与记忆 */
+bgm.addEventListener("play", function () {
+  musicToggle.classList.add("playing");
+  localStorage.setItem("wujing-bgm", "on");
+});
+bgm.addEventListener("pause", function () {
+  musicToggle.classList.remove("playing");
+  localStorage.setItem("wujing-bgm", "off");
+});
