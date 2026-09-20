@@ -855,6 +855,46 @@ html[data-theme="dark"] .hero-logo img {
   color: var(--text);
 }
 
+/* ========== 12.5 背景音乐悬浮按钮 ==========
+   右下角小圆钮，不挡导航不挡内容；深浅色自动跟随变量。
+   交互逻辑见 script.js 末尾「背景音乐」段。 */
+.music-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  display: grid;
+  place-items: center;
+  z-index: 200; /* 高于导航 100，悬浮在内容之上 */
+  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.music-toggle:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.music-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 两种图标互斥：未播放显示「音符+斜杠」，播放中显示「音符」 */
+.music-toggle .icon-playing { display: none; }
+.music-toggle .icon-muted { display: block; }
+.music-toggle.playing .icon-playing { display: block; }
+.music-toggle.playing .icon-muted { display: none; }
+
+@media (max-width: 480px) {
+  .music-toggle { right: 14px; bottom: 14px; width: 38px; height: 38px; }
+}
+
 /* ========== 13 滚动渐显动画（仅在启用 JS 时生效） ========== */
 .js .reveal {
   opacity: 0;
