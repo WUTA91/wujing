@@ -239,6 +239,24 @@
     </div>
   </footer>
 
+  <!-- 背景音乐：右下角悬浮按钮，首次点击页面任意位置后自动开始播放 -->
+  <button class="music-toggle" id="musicToggle" aria-label="背景音乐开关" title="背景音乐">
+    <!-- 播放中：音符图标 -->
+    <svg class="music-icon icon-playing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 18V6l10-2v12"></path>
+      <circle cx="6.5" cy="18" r="2.5"></circle>
+      <circle cx="16.5" cy="16" r="2.5"></circle>
+    </svg>
+    <!-- 已暂停：音符加斜杠 -->
+    <svg class="music-icon icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 18V6l10-2v12"></path>
+      <circle cx="6.5" cy="18" r="2.5"></circle>
+      <circle cx="16.5" cy="16" r="2.5"></circle>
+      <line x1="3" y1="3" x2="21" y2="21"></line>
+    </svg>
+  </button>
+  <audio id="bgm" src="assets/bgm.mp3" loop preload="auto"></audio>
+
   <!-- 页面逻辑与数据配置（成员 / 项目 / 公告都在里面改） -->
   <script src="script.js"></script>
 </body>
