@@ -36,7 +36,7 @@ const PROJECTS = [
     category: "我们的网页",
     desc: "由無境团队开发的飞行类专注网页，欢迎各位体验",
     image: "assets/airplan.jpg",
-    link: "https://wj-airplane.pages.dev"
+    link: "https://wj-airplane.wujingcn.top"
   }
 ];
 
