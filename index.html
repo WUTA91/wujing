@@ -75,12 +75,12 @@
          ============================================================ -->
     <section id="home" class="hero">
       <div class="container">
-        <!-- 主视觉：商标图（替代原大标题文字） -->
+        <!-- 主视觉：商标图（替代原大标题文字）。用 reveal 过渡错峰入场，不能加 CSS animation（会破坏 mix-blend-mode 抠图，见交接说明第 6 条） -->
         <h1 class="hero-logo reveal">
           <img src="assets/logo.jpeg" alt="WUJING ·無境">
         </h1>
-        <p class="hero-tagline reveal">综合创作团队，业务覆盖视频宣发、网页制作等多类项目</p>
-        <div class="hero-services reveal">
+        <p class="hero-tagline reveal reveal-right" style="transition-delay: 0.12s">综合创作团队，业务覆盖视频宣发、网页制作等多类项目</p>
+        <div class="hero-services reveal reveal-left" style="transition-delay: 0.24s">
           <span>视频宣发</span><i></i>
           <span>网页制作</span><i></i>
           <span>多元创作</span>
@@ -96,7 +96,7 @@
         <div class="section-head reveal">
           <h2>关于 WUJING ·無境</h2>
         </div>
-        <div class="about-body reveal">
+        <div class="about-body reveal reveal-left">
           <p>「無境」，意为没有边界——创作不应被形式束缚。</p>
           <p>WUJING ·無境 是一支综合创作团队，由无他与风起多意创立于2025年末。我们致力于极简的设计、卓越的执行，把每一个想法打磨成可交付的极致作品。</p>
           <p>我们坚持以赤诚之心悉心打磨造就卓越，为我们的用户呈上最好的臻品。我们的目标只有两点：坚持，进步。</p>
@@ -115,7 +115,7 @@
           <h2>我们的伙伴</h2>
           <p class="section-sub">团队成员介绍</p>
         </div>
-        <div class="members-grid" id="membersGrid"></div>
+        <div class="members-grid reveal" id="membersGrid"></div>
       </div>
     </section>
 
@@ -163,7 +163,7 @@
           <h2>公告</h2>
           <p class="section-sub">关于我们的大小事</p>
         </div>
-        <ul class="announce-list" id="announceList"></ul>
+        <ul class="announce-list reveal" id="announceList"></ul>
       </div>
     </section>
 
@@ -177,7 +177,7 @@
           <p class="section-sub">合作与咨询，我们在听</p>
         </div>
 
-        <div class="contact-grid reveal">
+        <div class="contact-grid reveal reveal-right">
           <!-- 邮箱：改成真实邮箱（同时改 href="mailto:..." 和下面的文字） -->
           <a class="contact-item" href="mailto:info@wujingcn.top">
             <span class="contact-icon">
@@ -204,8 +204,8 @@
             </span>
           </a>
 
-          <!-- 抖音：改成真实账号 -->
-          <div class="contact-item">
+          <!-- 抖音：整卡可点击跳转抖音主页，换账号改下方 href -->
+          <a class="contact-item" href="https://www.douyin.com/user/MS4wLjABAAAANishyepL4__QJUeQeIxPD04dpyCHbnD1U5P5AqIZ2rd66cJSRa-qLNwYcbH7vCqG" target="_blank" rel="noopener">
             <span class="contact-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"></path><circle cx="6.5" cy="18" r="2.5"></circle><circle cx="16.5" cy="16" r="2.5"></circle></svg>
             </span>
@@ -213,11 +213,11 @@
               <h3>抖音</h3>
               <p>@WUJING ·無境</p>
             </span>
-          </div>
+          </a>
         </div>
 
         <!-- 一键联系按钮：加入QQ交流群 + 发送邮件 -->
-        <div class="contact-cta reveal">
+        <div class="contact-cta reveal reveal-left">
           <a class="btn btn-qq" href="https://qm.qq.com/cgi-bin/qm/qr?k=BEuS1qSnmSt6-jcE9arZcIktm2FINuJ1&amp;jump_from=webapi&amp;authKey=3SCsayGiLuiNjakJJwLGvFA+zNsJNa76bhTiC/HzdpK5VV6lnWRjrxRDzHFZt947" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9.3 8.4 8.9 8.9 0 0 1-3.2-.6L4 20.5l1.1-3.6A8.5 8.5 0 1 1 21 11.5z"></path></svg>
             加入QQ交流群
@@ -238,6 +238,18 @@
       <a href="#home" class="back-top">回到顶部</a>
     </div>
   </footer>
+
+  <!-- ============================================================
+       通用弹窗：成员详情 / 项目详情共用，内容由 script.js 注入
+       ============================================================ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose" aria-label="关闭弹窗">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <!-- 背景音乐：右下角悬浮按钮，首次点击页面任意位置后自动开始播放 -->
   <button class="music-toggle" id="musicToggle" aria-label="背景音乐开关" title="背景音乐">
