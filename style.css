@@ -433,6 +433,7 @@ html[data-theme="dark"] .hero-logo img {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px 24px;
+  cursor: pointer; /* 点击弹出详情弹窗（script.js 事件委托） */
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -480,6 +481,31 @@ html[data-theme="dark"] .hero-logo img {
   margin-top: 12px;
   font-size: 14px;
   color: var(--text-2);
+}
+
+/* 成员卡底部「查看简介」提示（点击弹窗） */
+.member-more {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-3);
+  transition: color 0.2s ease;
+}
+
+.member-more svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+}
+
+.member-card:hover .member-more {
+  color: var(--text);
+}
+
+.member-card:hover .member-more svg {
+  transform: translateX(2px);
 }
 
 /* ========== 09 项目作品（横向滑动卡片） ========== */
@@ -898,14 +924,27 @@ html[data-theme="dark"] .hero-logo img {
 /* ========== 13 滚动渐显动画（仅在启用 JS 时生效） ========== */
 .js .reveal {
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
 }
+
+/* 方向变体：从左侧滑入 / 从右侧滑入 / 从上方落下（默认向上）。
+   仿活动页的多向入场，位移保持克制，不喧宾夺主 */
+.js .reveal.reveal-left { transform: translateX(-20px); }
+.js .reveal.reveal-right { transform: translateX(20px); }
+.js .reveal.reveal-down { transform: translateY(-14px); }
 
 .js .reveal.visible {
   opacity: 1;
   transform: none;
 }
+
+/* 首屏 Hero 错峰入场（对标活动页 slogan 的 toRightSmall 入场）：
+   商标向上滑入 → 标语从右滑入 → 服务条从左滑入，各错 0.12s。
+   ★ 注意：这里只能用 reveal 过渡（transition），不能用 CSS animation——
+   animation 会把元素拉进独立合成层，破坏 .hero-logo img 的 mix-blend-mode
+   抠白底，导致大标题 logo 显示异常（用户已踩过）。
+   错峰由 index.html 内联 transition-delay 实现，此处无需额外代码。 */
 
 /* 尊重系统「减少动态效果」设置：关闭平滑滚动与动画 */
 @media (prefers-reduced-motion: reduce) {
@@ -998,4 +1037,309 @@ html[data-theme="dark"] .hero-logo img {
   .hero-services span {
     padding: 0 12px;
   }
+
+  .modal-panel {
+    padding: 22px;
+  }
+
+  /* 移动端面板 padding 变小，背景图负 margin 同步调整 */
+  .modal-member-bg {
+    margin: -22px -22px 0;
+    padding: 40px 22px 22px;
+  }
+}
+
+/* ========== 15 通用弹窗（成员详情 / 项目详情共用） ==========
+   遮罩 + 面板，深浅色自动跟随变量；打开/关闭由 script.js 控制 .open */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300; /* 高于导航 100 与音乐按钮 200 */
+  background: rgba(10, 12, 15, 0.5);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-panel {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: min(78vh, 640px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+  transform: translateY(14px) scale(0.98);
+  transition: transform 0.25s ease;
+}
+
+.modal-overlay.open .modal-panel {
+  transform: none;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-3);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.modal-close:hover {
+  color: var(--text);
+  background: var(--bg-soft);
+}
+
+.modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 弹窗内容：成员详情 */
+.modal-member {
+  position: relative;
+  isolation: isolate; /* 背景图遮罩用负 z-index，不盖文字 */
+  text-align: center;
+  padding-top: 6px;
+}
+
+/* 成员弹窗带背景图（MEMBERS 数组里填 bg 字段触发）：
+   仿 Hero 壁纸——图铺弹窗上半部分，上下渐隐回弹窗底色。
+   负 margin 抵消面板 padding，让图顶到弹窗边缘，上部留出展示区 */
+.modal-member-bg {
+  margin: -30px -30px 0;
+  padding: 46px 30px 30px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* 上下渐隐遮罩：只压背景图边缘、不盖文字（与 Hero ::before 同一套思路） */
+.modal-member-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--surface) 0%,
+    rgba(255, 255, 255, 0) 22%,
+    rgba(255, 255, 255, 0) 58%,
+    var(--surface) 100%
+  );
+}
+
+.modal-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-2);
+  margin: 0 auto 18px;
+  overflow: hidden;
+}
+
+.modal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-name {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modal-role {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+.modal-bio {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+
+.modal-detail {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-2);
+  text-align: left;
+}
+
+.modal-detail-placeholder {
+  color: var(--text-3);
+  font-style: italic;
+}
+
+/* 弹窗内容：项目详情 */
+.modal-media {
+  height: 170px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+}
+
+.modal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 项目弹窗多图轮播（images 数组触发）：横向滑动 + 圆点 + 左右箭头 */
+.modal-gallery {
+  position: relative;
+}
+
+.modal-gallery-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  border-radius: var(--radius);
+  scrollbar-width: none; /* Firefox 隐藏滚动条 */
+}
+
+.modal-gallery-track::-webkit-scrollbar {
+  display: none; /* Chrome / Safari 隐藏滚动条 */
+}
+
+.modal-gallery-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  height: 220px;
+}
+
+.modal-gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 圆点指示：当前项变胶囊形 */
+.modal-gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.modal-gallery-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.modal-gallery-dot.active {
+  width: 16px;
+  background: var(--text-2);
+}
+
+/* 左右箭头：桌面 hover 出现，触屏常显 */
+.modal-gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.modal-gallery:hover .modal-gallery-btn {
+  opacity: 1;
+}
+
+.modal-gallery-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gallery-prev {
+  left: 10px;
+}
+
+.gallery-next {
+  right: 10px;
+}
+
+.modal-gallery-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+@media (hover: none) {
+  .modal-gallery-btn {
+    opacity: 0.7;
+  }
+}
+
+.modal-project .modal-name {
+  margin-top: 14px;
+}
+
+.modal-project .modal-bio {
+  margin-top: 10px;
+}
+
+/* 「立即体验」按钮：占满宽度，跳转外部链接 */
+.modal-enter {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-enter svg {
+  width: 15px;
+  height: 15px;
 }
