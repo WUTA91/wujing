@@ -13,14 +13,18 @@
    name    姓名（必填）
    role    职务 / 负责方向（必填）
    bio     一句话介绍（选填，留空 "" 则不显示）
+   detail  详细简介（选填，弹窗里展示；留空 "" 显示"整理中"占位，可后补）
+   bg      弹窗背景图（选填，仿 Hero 壁纸铺在弹窗上半部分+上下渐隐；
+           把图放进 assets/ 文件夹，填 "assets/xxx.jpg"；留空 "" 则纯色弹窗）
    avatar  头像图片（选填，留空 "" 自动用姓名首字生成圆形占位；
            要放图片：把图片放进 assets/ 文件夹，填 "assets/xxx.jpg"） */
 const MEMBERS = [
-  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "高中生一名，無境团队创始人之一，坚持卓越的设计理念", avatar: "assets/无他.jpg" },
+  { name: "无他", role: "创始人，产品总监，视觉设计", bio: "高中生一名，国家级帆船运动员，無境团队创始人之一，坚持卓越的设计理念", avatar: "assets/无他.jpg" },
   { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "臭指挥AI的中学生，对数码、网络有兴趣和较浅的研究，“無境”命名创意灵感提供者", avatar: "assets/fengqiduoyi.jpg" },
-  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b", avatar: "assets/。.jpg" },
+  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b。以下由管理添加：项目页中的工具箱开发者，邮箱hail@hotmail.com", avatar: "assets/。.jpg" },
   { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴", avatar: "assets/shayebuxianggan.jpg" },
-  { name: "Yarent80", role: "视频宣发", bio: "负责在bilibili发布视频", avatar: "assets/80.jpg" }
+  { name: "Yarent80", role: "视频宣发", bio: "负责在bilibili发布视频", avatar: "assets/80.jpg" },
+  { name: "青山依旧", role: "合作伙伴，视频宣发", bio: "一个初中生，负责在抖音上发视频", avatar: "assets/青山依旧.jpg" }
 ];
 
 /* ===== 项目作品：每条 {} 是一个项目卡片 =====
@@ -28,15 +32,26 @@ const MEMBERS = [
    title     项目名称（必填）
    category  项目类型标签（选填，如「视频宣发」「网页制作」）
    desc      一句话描述（必填）
-   image     封面图地址（选填，留空 "" 则显示灰色占位；建议 16:9 或 3:2 的横图）
-   link      点击卡片跳转的外部链接（必填，改成真实链接，如 https://www.xxx.com） */
+   image     封面图地址（选填，单图；留空 "" 则显示灰色占位；建议 16:9 或 3:2 的横图）
+   images    弹窗多图（选填，图片数组，弹窗里左右滑动浏览；如 ["assets/a.jpg","assets/b.jpg"]。
+             不填则用上面的 image 单图；两个都不填显示占位）
+   detail    项目详细介绍（选填，弹窗里展示；留空 "" 显示"整理中"占位，可后补）
+   link      项目链接（必填，弹窗内「立即体验」按钮跳转此链接） */
 const PROJECTS = [
   {
     title: "Airplane 专注",
     category: "我们的网页",
     desc: "由無境团队开发的飞行类专注网页，欢迎各位体验",
     image: "assets/airplan.jpg",
-    link: "https://wj-airplane.wujingcn.top"
+    link: "https://wj-airplane.pages.dev"
+  },
+  {
+    title: "L- Mini Tools工具箱",
+    category: "我们的网页",
+    desc: "由团队成员“。”开发的全场景工具箱",
+    image: "assets/dsfgjx.png",
+    detail:"L-Mini Tools 导航页，集合工具与成员展示，支持深色模式、移动端、一键复制，纯静态开箱即用。该工具箱不完全受我团队控制，我团队将持续监测页面内容，以保证您的合法权益",
+    link: "https://ltool.pages.dev/"
   }
 ];
 
@@ -47,6 +62,7 @@ const PROJECTS = [
    text  公告内容 */
 const ANNOUNCEMENTS = [
   { date: "2026-09-17", text: "WUJING ·無境 团队官网正式上线，欢迎各界伙伴上线体验" },
+  {date:"2026-09-25",text:"万家灯火，九州同庆！WUJING無境 祝各位中秋、国庆佳节快乐！"},
 ];
 
 /* ============================================================
@@ -92,7 +108,7 @@ mainNav.querySelectorAll(".nav-link").forEach(function (link) {
 /* ---------- 渲染成员卡片 ---------- */
 const membersGrid = document.getElementById("membersGrid");
 
-membersGrid.innerHTML = MEMBERS.map(function (m) {
+membersGrid.innerHTML = MEMBERS.map(function (m, i) {
   const initial = escapeHTML((m.name || "無").trim().charAt(0));
   /* 有 avatar 图片就显示图片，没有就显示姓名首字圆形占位 */
   const avatar = m.avatar
@@ -100,11 +116,14 @@ membersGrid.innerHTML = MEMBERS.map(function (m) {
     : '<div class="member-avatar">' + initial + "</div>";
   const bio = m.bio ? '<p class="member-bio">' + escapeHTML(m.bio) + "</p>" : "";
   return (
-    '<article class="member-card">' +
+    '<article class="member-card" data-index="' + i + '">' +
     avatar +
     '<h3 class="member-name">' + escapeHTML(m.name) + "</h3>" +
     '<p class="member-role">' + escapeHTML(m.role) + "</p>" +
     bio +
+    '<span class="member-more">查看简介' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>' +
+    "</span>" +
     "</article>"
   );
 }).join("");
@@ -112,19 +131,19 @@ membersGrid.innerHTML = MEMBERS.map(function (m) {
 /* ---------- 渲染项目卡片（横向滚动区） ---------- */
 const track = document.getElementById("projectTrack");
 
-track.innerHTML = PROJECTS.map(function (p) {
+track.innerHTML = PROJECTS.map(function (p, i) {
   const media = p.image
     ? '<img src="' + escapeHTML(p.image) + '" alt="' + escapeHTML(p.title) + '" loading="lazy">'
     : "<span>" + escapeHTML(p.category) + "</span>";
   return (
     '<article class="project-card">' +
-    '<a class="project-card-link" href="' + escapeHTML(p.link) + '" target="_blank" rel="noopener">' +
+    '<a class="project-card-link" href="' + escapeHTML(p.link) + '" target="_blank" rel="noopener" data-index="' + i + '">' +
     '<div class="card-media">' + media + "</div>" +
     '<div class="card-body">' +
     '<span class="card-tag">' + escapeHTML(p.category) + "</span>" +
     '<h3 class="card-title">' + escapeHTML(p.title) + "</h3>" +
     '<p class="card-desc">' + escapeHTML(p.desc) + "</p>" +
-    '<span class="card-footer">查看项目 ' +
+    '<span class="card-footer">查看详情 ' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg>' +
     "</span>" +
     "</div>" +
@@ -215,6 +234,150 @@ function renderAnnouncements() {
 
 renderAnnouncements();
 
+/* ---------- 通用弹窗：成员详情 / 项目详情（共用 index.html 里的遮罩与面板） ---------- */
+const modalOverlay = document.getElementById("modalOverlay");
+const modalBody = document.getElementById("modalBody");
+const modalClose = document.getElementById("modalClose");
+
+function openModal(html) {
+  modalBody.innerHTML = html;
+  modalOverlay.classList.add("open");
+  document.body.style.overflow = "hidden"; /* 弹窗时锁定背景滚动 */
+}
+
+function closeModal() {
+  modalOverlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+modalClose.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", function (e) {
+  if (e.target === modalOverlay) closeModal(); /* 点遮罩空白处关闭 */
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") closeModal(); /* ESC 关闭 */
+});
+
+/* 成员卡点击 → 成员详情弹窗 */
+function openMemberModal(i) {
+  const m = MEMBERS[i];
+  if (!m) return;
+  const initial = escapeHTML((m.name || "無").trim().charAt(0));
+  const avatar = m.avatar
+    ? '<div class="modal-avatar"><img src="' + escapeHTML(m.avatar) + '" alt="' + escapeHTML(m.name) + '"></div>'
+    : '<div class="modal-avatar">' + initial + "</div>";
+  const bio = m.bio ? '<p class="modal-bio">' + escapeHTML(m.bio) + "</p>" : "";
+  const detail = m.detail
+    ? '<div class="modal-detail">' + escapeHTML(m.detail) + "</div>"
+    : '<div class="modal-detail"><span class="modal-detail-placeholder">详细简介整理中，敬请期待…</span></div>';
+  /* 有 bg 字段就给弹窗上半部分铺背景图（仿 Hero 壁纸 + 上下渐隐），没有则纯色弹窗 */
+  const bgClass = m.bg ? " modal-member-bg" : "";
+  const bgStyle = m.bg ? ' style="background-image:url(\'' + escapeHTML(m.bg) + '\')"' : "";
+  openModal(
+    '<div class="modal-member' + bgClass + '"' + bgStyle + ">" +
+    avatar +
+    '<h3 class="modal-name">' + escapeHTML(m.name) + "</h3>" +
+    '<p class="modal-role">' + escapeHTML(m.role) + "</p>" +
+    bio +
+    detail +
+    "</div>"
+  );
+}
+
+membersGrid.addEventListener("click", function (e) {
+  const card = e.target.closest(".member-card");
+  if (!card) return;
+  openMemberModal(Number(card.getAttribute("data-index")));
+});
+
+/* 项目卡点击 → 项目详情弹窗，弹窗内「立即体验」按钮再跳外部链接。
+   中键 / Ctrl 点击仍直接开新标签（浏览器默认行为，不拦截）。 */
+function openProjectModal(i) {
+  const p = PROJECTS[i];
+  if (!p) return;
+  /* 弹窗图片：优先 images 多图（滑动浏览），其次 image 单图，都没有则占位 */
+  const shots = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+  let mediaHtml = "";
+  if (shots.length) {
+    const slides = shots.map(function (src) {
+      return '<div class="modal-gallery-slide"><img src="' + escapeHTML(src) + '" alt="' + escapeHTML(p.title) + '"></div>';
+    }).join("");
+    const dots = shots.length > 1
+      ? '<div class="modal-gallery-dots">' + shots.map(function (_, di) {
+          return '<button class="modal-gallery-dot' + (di === 0 ? " active" : "") + '" aria-label="第 ' + (di + 1) + ' 张图"></button>';
+        }).join("") + "</div>"
+      : "";
+    const arrows = shots.length > 1
+      ? '<button class="modal-gallery-btn gallery-prev" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"></path></svg></button>' +
+        '<button class="modal-gallery-btn gallery-next" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"></path></svg></button>'
+      : "";
+    mediaHtml = '<div class="modal-gallery">' +
+      '<div class="modal-gallery-track">' + slides + "</div>" +
+      dots + arrows +
+      "</div>";
+  } else {
+    mediaHtml = '<div class="modal-media">' + escapeHTML(p.category) + "</div>";
+  }
+  const detail = p.detail
+    ? '<div class="modal-detail">' + escapeHTML(p.detail) + "</div>"
+    : '<div class="modal-detail"><span class="modal-detail-placeholder">项目介绍整理中，敬请期待…</span></div>';
+  openModal(
+    '<div class="modal-project">' +
+    mediaHtml +
+    '<span class="card-tag">' + escapeHTML(p.category) + "</span>" +
+    '<h3 class="modal-name">' + escapeHTML(p.title) + "</h3>" +
+    '<p class="modal-bio">' + escapeHTML(p.desc) + "</p>" +
+    detail +
+    '<a class="btn modal-enter" href="' + escapeHTML(p.link) + '" target="_blank" rel="noopener">立即体验' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg>' +
+    "</a>" +
+    "</div>"
+  );
+  /* 弹窗注入后初始化图片轮播（圆点指示 + 左右箭头 + 拖拽滑动） */
+  const gallery = modalBody.querySelector(".modal-gallery");
+  if (gallery) initGallery(gallery);
+}
+
+/* 弹窗内图片轮播：横向滑动 / 左右箭头 / 圆点指示联动 */
+function initGallery(galleryEl) {
+  const track = galleryEl.querySelector(".modal-gallery-track");
+  const dots = galleryEl.querySelectorAll(".modal-gallery-dot");
+  const prev = galleryEl.querySelector(".gallery-prev");
+  const next = galleryEl.querySelector(".gallery-next");
+  if (!track) return;
+
+  function update() {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    dots.forEach(function (d, di) {
+      d.classList.toggle("active", di === idx);
+    });
+    if (prev) prev.disabled = idx <= 0;
+    if (next) next.disabled = idx >= dots.length - 1;
+  }
+
+  track.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  dots.forEach(function (d, di) {
+    d.addEventListener("click", function () {
+      track.scrollTo({ left: di * track.clientWidth, behavior: "smooth" });
+    });
+  });
+  if (prev) prev.addEventListener("click", function () {
+    track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
+  });
+  if (next) next.addEventListener("click", function () {
+    track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+  });
+  update();
+}
+
+track.addEventListener("click", function (e) {
+  const link = e.target.closest(".project-card-link");
+  if (!link) return;
+  e.preventDefault();
+  openProjectModal(Number(link.getAttribute("data-index")));
+});
+
 /* ---------- 导航高亮：滚动到哪个板块，就点亮对应链接 ---------- */
 const navLinks = document.querySelectorAll(".nav-link");
 const sections = document.querySelectorAll("section[id]");
@@ -236,7 +399,9 @@ sections.forEach(function (s) {
   spy.observe(s);
 });
 
-/* ---------- 滚动渐显动画（简约，不浮夸） ---------- */
+/* ---------- 滚动渐显动画（简约，不浮夸） ----------
+   双向触发：元素进入视口 → 播放入场动画；
+   完全滚出视口 → 收起（移除 visible），下次滚回来重新播放。 */
 const revealEls = document.querySelectorAll(".reveal");
 
 const revealObs = new IntersectionObserver(
@@ -244,7 +409,8 @@ const revealObs = new IntersectionObserver(
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
         entry.target.classList.add("visible");
-        revealObs.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove("visible");
       }
     });
   },
