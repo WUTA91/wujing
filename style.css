@@ -1123,10 +1123,12 @@ html[data-theme="dark"] .hero-logo img {
   padding-top: 6px;
 }
 
-/* 成员弹窗带背景图（MEMBERS 数组里填 bg 字段触发）：
-   仿 Hero 壁纸——图铺弹窗上半部分，上下渐隐回弹窗底色。
-   负 margin 抵消面板 padding，让图顶到弹窗边缘，上部留出展示区 */
+/* 成员弹窗带背景图（MEMBERS 数组填 bg 字段触发）：
+   图只铺弹窗顶部，压暗 + 上下渐隐，保证文字清晰；简介区在下方纯色区。
+   负 margin 抵消面板 padding 让图顶到弹窗边缘；图片多花都能压得住 */
 .modal-member-bg {
+  position: relative;
+  isolation: isolate;
   margin: -30px -30px 0;
   padding: 46px 30px 30px;
   background-size: cover;
@@ -1135,7 +1137,8 @@ html[data-theme="dark"] .hero-logo img {
   border-radius: var(--radius) var(--radius) 0 0;
 }
 
-/* 上下渐隐遮罩：只压背景图边缘、不盖文字（与 Hero ::before 同一套思路） */
+/* 综合处理层（压在图上、文字之下）：
+   顶部渐入弹窗底色 → 中部压暗图片 → 底部渐出回底色，让图融进下方内容区 */
 .modal-member-bg::before {
   content: "";
   position: absolute;
@@ -1145,10 +1148,31 @@ html[data-theme="dark"] .hero-logo img {
   background: linear-gradient(
     to bottom,
     var(--surface) 0%,
-    rgba(255, 255, 255, 0) 22%,
-    rgba(255, 255, 255, 0) 58%,
+    rgba(0, 0, 0, 0) 14%,
+    rgba(0, 0, 0, 0.38) 36%,
+    rgba(0, 0, 0, 0.55) 68%,
     var(--surface) 100%
   );
+}
+
+/* 背景图上的文字固定用亮色（图已统一压暗，与深浅色主题无关，深浅都清晰） */
+.modal-member-bg .modal-avatar {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.modal-member-bg .modal-name {
+  color: #fff;
+}
+
+.modal-member-bg .modal-role {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* 有背景图时，简介区与图区之间留出间距 */
+.modal-member-bg + .modal-member-content {
+  padding-top: 18px;
 }
 
 .modal-avatar {
