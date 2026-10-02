@@ -21,8 +21,8 @@
 const MEMBERS = [
   { name: "无他", role: "创始人，产品总监，视觉设计", bio: "高中生一名，国家级帆船运动员，無境团队创始人之一，坚持卓越的设计理念", avatar: "assets/无他.jpg",bg:"assets/wutawall.jpg" },
   { name: "风起多意", role: "创始人，产品策划，应用总监", bio: "臭指挥AI的中学生，对数码、网络有兴趣和较浅的研究，“無境”命名创意灵感提供者", avatar: "assets/fengqiduoyi.jpg" },
-  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b。以下由管理添加：项目页中的工具箱开发者，邮箱hail@hotmail.com", avatar: "assets/。.jpg" },
-  { name: "啥也不想干", role: "合作伙伴", bio: "优秀的合作伙伴", avatar: "assets/shayebuxianggan.jpg" },
+  { name: "。", role: "合作伙伴", bio: "一个大量依赖Ai的啥b。以下由管理添加：项目页中的工具箱开发者，邮箱hail@hotmail.com", avatar: "assets/。.jpg" ,bg:"assets/liuwall.png"},
+  { name: "啥也不想干", role: "合作伙伴", bio: "一个酷爱研究交通、地图的高中生，擅长QGIS地图制作，精通Adobe Ai、Ps及WPS软件", avatar: "assets/shayebuxianggan.jpg",bg:"assets/shayebuxiangganwall.jpg" },
   { name: "Yarent80", role: "视频宣发", bio: "负责在bilibili发布视频", avatar: "assets/80.jpg" },
   { name: "青山依旧", role: "合作伙伴，视频宣发", bio: "一个初中生，负责在抖音上发视频", avatar: "assets/青山依旧.jpg", bg:"assets/qingshanwall.jpg"},
   { name: "Damon", role: "合作伙伴", bio: "优秀的合作伙伴",avatar: "assets/damon.jpg" }
