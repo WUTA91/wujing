@@ -421,6 +421,144 @@ html[data-theme="dark"] .hero-logo img {
   font-weight: 600;
 }
 
+/* ========== 07b 成长历程时间线 ==========
+   桌面端：水平时间线，横向可滑动（和项目区一致），节点固定宽度、间距大。
+   节点内容左对齐，月份灰色小字 + 大粗体标题。
+   手机端（≤768px）自动切回竖向时间线。 */
+.timeline {
+  position: relative;
+  margin-top: 24px;
+  display: flex;
+  gap: 48px;
+  padding: 0 4px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+}
+
+.timeline.dragging {
+  cursor: grabbing;
+}
+
+/* 隐藏横向滚动条（保留滚动功能） */
+.timeline::-webkit-scrollbar {
+  height: 4px;
+}
+.timeline::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  text-align: left;
+  padding: 32px 0 0;
+}
+
+/* 每个节点自己画一段线：从圆点中心向右延伸到下一个节点（item宽220+gap48） */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 7px; /* 圆点中心位置（dot宽14px，中心在7px） */
+  top: 6px;
+  width: calc(100% + 48px);
+  height: 2px;
+  background: var(--border);
+}
+
+/* 最后一个节点不画线 */
+.timeline-item:last-child::before {
+  display: none;
+}
+
+/* 节点小圆点：压在横线上 */
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 3px var(--bg);
+  z-index: 1;
+}
+
+.timeline-date {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.01em;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+
+.timeline-text {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+
+/* 手机端：切回竖向时间线 */
+@media (max-width: 768px) {
+  .timeline {
+    display: block;
+    padding-left: 28px;
+    overflow: visible;
+    gap: 0;
+  }
+
+  .timeline-item {
+    flex: none;
+    text-align: left;
+    padding: 0 0 32px 0;
+  }
+
+  /* 竖向时：竖线画在容器上，不画在每个 item 上 */
+  .timeline-item::before {
+    display: none;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+    border-radius: 2px;
+  }
+
+  .timeline-dot {
+    left: -28px;
+    top: 6px;
+  }
+
+  .timeline-date {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .timeline-title {
+    font-size: 15px;
+    color: var(--text-2);
+  }
+}
+
 /* ========== 08 成员列表 ========== */
 .members-grid {
   display: grid;
@@ -1017,6 +1155,20 @@ html[data-theme="dark"] .hero-logo img {
   .announce-date,
   .card-tag {
     font-size: 13px;
+  }
+
+  /* 「查看简介」「时间线日期」等辅助小字在手机上稍微调大 */
+  .member-more,
+  .timeline-date {
+    font-size: 13px;
+  }
+
+  /* 返回顶部按钮：手机上加大点击区，别太小点不准 */
+  .back-top {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 8px;
   }
 
   /* 提示文字在窄屏下隐藏，减少干扰 */
