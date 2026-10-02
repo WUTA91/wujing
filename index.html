@@ -6,6 +6,20 @@
   <meta name="description" content="WUJING ·無境——综合创作团队，业务包含视频宣发、网页制作等多类项目。">
   <title>WUJING ·無境｜综合创作团队</title>
 
+  <!-- Open Graph / 社交分享卡片：发到微信/QQ/微博时显示的预览图+简介 -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WUJING ·無境">
+  <meta property="og:title" content="WUJING ·無境｜综合创作团队">
+  <meta property="og:description" content="「無境」，意为没有边界——创作不应被形式束缚。综合创作团队，业务覆盖视频宣发、网页制作等多类项目。">
+  <meta property="og:url" content="https://www.wujingcn.top/">
+  <meta property="og:image" content="https://www.wujingcn.top/assets/logo.jpeg">
+  <meta property="og:locale" content="zh_CN">
+  <!-- Twitter 卡片（部分平台兼容） -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WUJING ·無境｜综合创作团队">
+  <meta name="twitter:description" content="「無境」，意为没有边界——创作不应被形式束缚。">
+  <meta name="twitter:image" content="https://www.wujingcn.top/assets/logo.jpeg">
+
   <!-- 网站图标：内联 SVG 极简 W 字标，如需更换直接改下面的 path 即可 -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%2322262B'/%3E%3Cpath%20d='M6.5%2023%2011%209.5%2016%2017%2021%209.5%2025.5%2023'%20stroke='%23E9ECEF'%20stroke-width='2.4'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
 
@@ -39,6 +53,7 @@
       <nav class="main-nav" id="mainNav" aria-label="主导航">
         <a href="#home" class="nav-link">首页</a>
         <a href="#about" class="nav-link">关于我们</a>
+        <a href="#timeline" class="nav-link">成长历程</a>
         <a href="#members" class="nav-link">成员</a>
         <a href="#projects" class="nav-link">项目作品</a>
         <a href="#announcements" class="nav-link">公告</a>
@@ -106,7 +121,34 @@
     </section>
 
     <!-- ============================================================
-         ③ 成员列表：卡片由 script.js 中的 MEMBERS 数组自动生成，
+         ③ 成长历程：时间线由 script.js 中的 TIMELINE 数组自动生成，
+            新增 / 修改里程碑请打开 script.js 顶部「数据配置区」
+         ============================================================ -->
+    <section id="timeline" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>成长历程</h2>
+          <p class="section-sub">从一个想法，到一支团队</p>
+        </div>
+        <div class="timeline-wrap reveal">
+          <div class="projects-toolbar">
+            <span class="projects-hint">← 拖动或点击按钮浏览 →</span>
+            <div class="track-btns">
+              <button class="track-btn" id="timelinePrev" aria-label="向左滚动">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"></path></svg>
+              </button>
+              <button class="track-btn" id="timelineNext" aria-label="向右滚动">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"></path></svg>
+              </button>
+            </div>
+          </div>
+          <div class="timeline" id="timelineList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ④ 成员列表：卡片由 script.js 中的 MEMBERS 数组自动生成，
             新增/修改成员请打开 script.js 顶部「数据配置区」
          ============================================================ -->
     <section id="members" class="section section-alt">
