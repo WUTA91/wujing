@@ -66,6 +66,21 @@ const ANNOUNCEMENTS = [
   {date:"2026-09-25",text:"万家灯火，九州同庆！WUJING無境 祝各位中秋、国庆佳节快乐！"},
 ];
 
+/* ===== 成长历程：每条 {} 是一个时间线节点 =====
+   新增：复制一条 {}，加逗号粘贴后修改内容；
+   时间从早到晚排列（页面会自动从上到下展示）。
+   date   日期（小字灰色，必填，如 "2025.12" 或 "2026.09.17"）
+   title  节点标题（必填，如「团队成立」）
+   text   这段历程的描述（选填，留空 "" 则不显示描述） */
+const TIMELINE = [
+  { date: "2025.12", title: "星光出现", text: "無境团队创始人之一-无他开发了他的首款网页《时钟》，但现已停止支持。" },
+  { date: "2026.07", title: "流星划过", text: "无他，创建了团队的雏形-飞行计划社团。" },
+  { date: "2026.07", title: "首个作品", text: "Airplan 专注网页上线，团队第一次把想法做成了可以被别人使用的东西。" },
+  { date: "2026.08", title: "团队创立", text: "无他与风起多意萌生了做一支全维度创作团队的念头，「無境」这个名字也在这时由风起多意提了出来。"},
+  { date: "2026.09", title: "官网上线", text: "WUJING ·無境 团队官网正式发布，第一次有了属于我们自己的门面。"},
+  { date: "未来", title: "下一站", text: "更多项目正在路上。" }
+];
+
 /* ============================================================
    以下为页面逻辑代码（一般无需修改）
    ============================================================ */
@@ -104,6 +119,101 @@ mainNav.querySelectorAll(".nav-link").forEach(function (link) {
     hamburger.classList.remove("open");
     hamburger.setAttribute("aria-expanded", "false");
   });
+});
+
+/* ---------- 渲染成长历程时间线 ---------- */
+const timelineList = document.getElementById("timelineList");
+
+timelineList.innerHTML = TIMELINE.slice().reverse().map(function (t) {
+  const text = t.text ? '<p class="timeline-text">' + escapeHTML(t.text) + "</p>" : "";
+  return (
+    '<div class="timeline-item">' +
+    '<span class="timeline-dot" aria-hidden="true"></span>' +
+    '<div class="timeline-body">' +
+    '<span class="timeline-date">' + escapeHTML(t.date) + "</span>" +
+    '<h3 class="timeline-title">' + escapeHTML(t.title) + "</h3>" +
+    text +
+    "</div>" +
+    "</div>"
+  );
+}).join("");
+
+/* ---------- 时间线横向滚动：左右按钮 ---------- */
+const tlPrev = document.getElementById("timelinePrev");
+const tlNext = document.getElementById("timelineNext");
+
+function updateTimelineState() {
+  const max = timelineList.scrollWidth - timelineList.clientWidth;
+  tlPrev.disabled = timelineList.scrollLeft <= 4;
+  tlNext.disabled = timelineList.scrollLeft >= max - 4;
+}
+
+tlPrev.addEventListener("click", function () {
+  timelineList.scrollBy({ left: -timelineList.clientWidth * 0.7, behavior: "smooth" });
+});
+
+tlNext.addEventListener("click", function () {
+  timelineList.scrollBy({ left: timelineList.clientWidth * 0.7, behavior: "smooth" });
+});
+
+timelineList.addEventListener("scroll", updateTimelineState, { passive: true });
+window.addEventListener("resize", updateTimelineState);
+updateTimelineState();
+
+/* ---------- 时间线鼠标拖拽滑动（和项目区一致，带惯性） ---------- */
+let tlDown = false;
+let tlStartX = 0;
+let tlStartLeft = 0;
+let tlLastX = 0;
+let tlLastTime = 0;
+let tlVelocity = 0;
+let tlDragged = false;
+let tlRaf = null;
+
+timelineList.addEventListener("pointerdown", function (e) {
+  if (e.pointerType !== "mouse") return;
+  tlDown = true;
+  tlDragged = false;
+  tlStartX = e.clientX;
+  tlLastX = e.clientX;
+  tlLastTime = performance.now();
+  tlStartLeft = timelineList.scrollLeft;
+  tlVelocity = 0;
+  timelineList.classList.add("dragging");
+  if (tlRaf) { cancelAnimationFrame(tlRaf); tlRaf = null; }
+  timelineList.setPointerCapture(e.pointerId);
+});
+
+timelineList.addEventListener("pointermove", function (e) {
+  if (!tlDown) return;
+  const dx = e.clientX - tlStartX;
+  if (Math.abs(dx) > 5) tlDragged = true;
+  timelineList.scrollLeft = tlStartLeft - dx;
+  /* 记录速度用于松手惯性 */
+  const now = performance.now();
+  const dt = now - tlLastTime;
+  if (dt > 0) {
+    tlVelocity = (e.clientX - tlLastX) / dt;
+  }
+  tlLastX = e.clientX;
+  tlLastTime = now;
+});
+
+timelineList.addEventListener("pointerup", function (e) {
+  if (!tlDown) return;
+  tlDown = false;
+  timelineList.classList.remove("dragging");
+  timelineList.releasePointerCapture(e.pointerId);
+  /* 松手惯性：根据最后速度继续滑一点，再自然减速 */
+  let momentum = tlVelocity * 15;
+  if (Math.abs(momentum) > 1) {
+    function step() {
+      momentum *= 0.94;
+      timelineList.scrollLeft -= momentum;
+      if (Math.abs(momentum) > 0.3) tlRaf = requestAnimationFrame(step);
+    }
+    tlRaf = requestAnimationFrame(step);
+  }
 });
 
 /* ---------- 渲染成员卡片 ---------- */
