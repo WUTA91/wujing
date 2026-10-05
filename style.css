@@ -105,10 +105,7 @@ ul {
   list-style: none;
 }
 
-/* 锚点定位时，为固定的顶部导航留出高度，避免标题被遮住 */
-section[id] {
-  scroll-margin-top: calc(var(--header-h) + 10px);
-}
+/* 锚点定位时，为固定的顶部导航留出高度，避免标题被遮住（样式在 04 节头部，与 .site-header 放一起） */
 
 /* ========== 03 布局容器 ========== */
 .container {
@@ -121,26 +118,84 @@ section[id] {
   max-width: 820px;
 }
 
-/* ========== 04 顶部导航 ========== */
+/* ========== 04 顶部导航 ==========
+   两状态（切换由 script.js 加 .scrolled 类，阈值 scrollY > 10）：
+   状态1（无 .scrolled）：全程 fixed 顶在页面最上方，完全透明、无阴影、无模糊，内容左右铺满；
+   状态2（.scrolled）：整体缩成一条居中窄胶囊（半透明 + 毛玻璃 + 轻阴影）。
+   ★ 透明态的 logo 靠 mix-blend-mode 抠白底，所以这里只改颜色/圆角/尺寸/位置，不碰混合模式。 */
 .site-header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--header-h);
-  background: var(--header-bg);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 1100px;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
   z-index: 100;
+  transition: background 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
 }
 
+/* 状态2：滚动后 —— 液态玻璃（高透版） */
+.site-header.scrolled {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(50px) saturate(2.4) brightness(1.1);
+  -webkit-backdrop-filter: blur(50px) saturate(2.4) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* 深色模式 */
+html[data-theme="dark"] .site-header.scrolled {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* 顶部锚点定位时，为固定的头部留出滚动余量，避免标题被胶囊遮住 */
+section[id] {
+  scroll-margin-top: calc(var(--header-h) + 10px);
+}
+
+/* 导航内容：状态1 与 .container 同宽（logo 左、链接右，和改之前一致）；
+   状态2 胶囊变窄，这里同步收到 1100px 上限内并让两端留出 0（padding 在 header 上） */
 .header-inner {
   height: 100%;
+  /* 容器宽度：状态1 与 .container（1180px）一致，所以「logo 左 / 链接右」的位置和改之前相同 */
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 胶囊自带 28px 内边距，内容占满 */
+.site-header .header-inner {
+  max-width: none;
 }
 
 /* 左侧团队商标 */
@@ -151,6 +206,8 @@ section[id] {
 }
 
 /* 商标图片：高度随导航栏固定，宽度自动等比
+   ★ 28px 是按「窄胶囊里放得下 7 个导航项」定的：它直接吃掉 193px 宽度，
+     调大之前先按 .header-inner 注释里的算式核一遍总宽，否则右侧按钮会被裁掉。
    浅色模式：multiply 混合让白色底与导航栏自然融合（只剩黑色文字）；
    深色模式：反相为「白字黑底」再 lighten 混合，黑底融入深色导航栏 */
 .logo-img {
@@ -170,13 +227,16 @@ html[data-theme="dark"] .logo-img {
   display: flex;
   align-items: center;
   gap: 2px;
+  min-width: 0; /* 允许在窄屏幕上收缩 */
 }
 
+/* 导航项：恢复原始字号与内边距（胶囊上限 1100px，容得下 7 项 + 按钮） */
 .nav-link {
   padding: 7px 13px;
   border-radius: 8px;
   font-size: 14px;
   color: var(--text-2);
+  white-space: nowrap;
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -1019,44 +1079,151 @@ html[data-theme="dark"] .hero-logo img {
   color: var(--text);
 }
 
-/* ========== 12.5 背景音乐悬浮按钮 ==========
-   右下角小圆钮，不挡导航不挡内容；深浅色自动跟随变量。
-   交互逻辑见 script.js 末尾「背景音乐」段。 */
-.music-toggle {
+/* ========== 12.5 右侧悬浮工具栏 ==========
+   竖排白色圆形按钮组（参考绿联官网右侧悬浮栏）：
+   ① QQ交流群 ② 分享网站 ③ 背景音乐 ④ 回到顶部。
+   整个栏 fixed 在右侧垂直居中，不挡导航、不压 Hero（Hero 未做任何改动）。
+   新增按钮：在 index.html 的 .side-tools 里加一个 .tool-btn 即可自动获得样式。 */
+.side-tools {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 42px;
-  height: 42px;
+  right: 24px;
+  top: 55%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 200; /* 高于导航 100，低于弹窗遮罩 300 */
+}
+
+/* 栏内按钮统一样式：48px 圆形白底 + 轻阴影（第 4 个是原音乐按钮 .music-toggle） */
+.tool-btn,
+.music-toggle {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-2);
+  background: #fff;
+  color: #222;
   display: grid;
   place-items: center;
-  z-index: 200; /* 高于导航 100，悬浮在内容之上 */
-  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background-color 0.2s ease,
+              color 0.2s ease, box-shadow 0.2s ease,
+              opacity 0.25s ease, visibility 0.25s ease;
 }
 
+.tool-btn:hover,
 .music-toggle:hover {
-  color: var(--text);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 }
 
+/* 键盘可达性：聚焦时给出清晰轮廓 */
+.tool-btn:focus-visible,
+.music-toggle:focus-visible {
+  outline: 2px solid #222;
+  outline-offset: 2px;
+}
+
+.tool-btn svg,
 .music-toggle svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
-/* 两种图标互斥：未播放显示「音符+斜杠」，播放中显示「音符」 */
+/* 两种音乐图标互斥：未播放显示「音符+斜杠」，播放中显示「音符」
+   （显隐逻辑与 script.js 的 .playing 类配合，未作改动） */
 .music-toggle .icon-playing { display: none; }
 .music-toggle .icon-muted { display: block; }
 .music-toggle.playing .icon-playing { display: block; }
 .music-toggle.playing .icon-muted { display: none; }
 
-@media (max-width: 480px) {
-  .music-toggle { right: 14px; bottom: 14px; width: 38px; height: 38px; }
+/* ④ 回到顶部：唯一黑底白箭头按钮；默认隐藏（保留占位，避免出现时整栏跳动） */
+.tool-top {
+  background: #222;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tool-top.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* 深色模式：白底按钮变深灰底 + 浅色图标；
+   第 4 个黑底按钮反过来变白底深图标，保持对比 */
+html[data-theme="dark"] .tool-btn,
+html[data-theme="dark"] .music-toggle {
+  background: #2d333b;
+  color: #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+html[data-theme="dark"] .tool-btn:focus-visible,
+html[data-theme="dark"] .music-toggle:focus-visible {
+  outline-color: #e9ecef;
+}
+
+html[data-theme="dark"] .tool-top {
+  background: #fff;
+  color: #222;
+}
+
+/* 移动端：按钮缩小、更贴边，尽量不挡正文 */
+@media (max-width: 768px) {
+  .side-tools {
+    right: 12px;
+    gap: 10px;
+  }
+
+  .tool-btn,
+  .music-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tool-btn svg,
+  .music-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ========== 12.6 复制链接提示条（toast） ==========
+   点击悬浮栏「分享网站」后在页面正中央弹出，2 秒后自动消失；
+   元素在 index.html body 末尾，深浅色自动适配。 */
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  z-index: 400; /* 浮在导航 / 悬浮栏 / 弹窗之上，保证提示可见 */
+  max-width: min(80vw, 460px);
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: rgba(29, 31, 33, 0.94);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  word-break: break-all;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.copy-toast.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+html[data-theme="dark"] .copy-toast {
+  background: rgba(45, 51, 59, 0.96);
+  color: #e9ecef;
+  border: 1px solid #3a3e42;
 }
 
 /* ========== 13 滚动渐显动画（仅在启用 JS 时生效） ========== */
@@ -1109,16 +1276,20 @@ html[data-theme="dark"] .hero-logo img {
     display: flex;
   }
 
+  /* 移动端下拉菜单：挂在 .site-header 上（header 是定位祖先）。
+     header 用的是 `padding: 10px 28px`（水平方向），所以左右各外扩 28px + 12px
+     才能和胶囊两端对齐；顶部的 8px 空隙再加 `padding-top: 10px`，共 18px */
   .main-nav {
     position: absolute;
-    top: var(--header-h);
-    left: 0;
-    right: 0;
+    top: calc(100% + 18px);
+    left: -40px;
+    right: -40px;
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
     background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 10px 16px 16px;
     display: none;
     box-shadow: var(--shadow-md);
@@ -1180,6 +1351,22 @@ html[data-theme="dark"] .hero-logo img {
 @media (max-width: 480px) {
   .container {
     padding: 0 18px;
+  }
+
+  /* 窄屏导航：状态1 内边距收窄到 18px，与上方 .container 对齐，避免导航把 logo 挤到换行 */
+  .site-header {
+    padding: 0 1.125rem;
+  }
+
+  /* 状态2 胶囊沿用规格值（12px 顶距、28px 内边距），只把两端留白收窄一点适配窄屏 */
+  .site-header.scrolled {
+    padding: 10px 18px;
+  }
+
+  /* 下拉菜单左右外扩量跟着 480px 下的水平内边距走（18px + 12px） */
+  .main-nav {
+    left: -30px;
+    right: -30px;
   }
 
   .logo-img {
