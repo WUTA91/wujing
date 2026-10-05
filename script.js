@@ -106,6 +106,30 @@ themeToggle.addEventListener("click", function () {
 const hamburger = document.getElementById("hamburger");
 const mainNav = document.getElementById("mainNav");
 
+/* ---------- 顶部导航液态玻璃：滚动后收成半透明胶囊 ----------
+   页面在最顶部（scrollY < 10）时 header 完全透明、直接浮在 Hero 壁纸上；
+   向下滚动后加 .scrolled，由 CSS 过渡成圆角胶囊（见 style.css 04 节）。
+   只切一个 class、不写内联样式，配合 CSS 的 transition: all 0.3s ease 平滑无闪。 */
+const siteHeader = document.querySelector(".site-header");
+
+let headerScrolled = false;
+function updateHeaderState() {
+  if (!siteHeader) return;
+  const y = window.scrollY;
+  /* 迟滞区间：>30 才进胶囊态，<5 才退出，避免边界来回抖 */
+  if (!headerScrolled && y > 30) {
+    headerScrolled = true;
+    siteHeader.classList.add("scrolled");
+  } else if (headerScrolled && y < 5) {
+    headerScrolled = false;
+    siteHeader.classList.remove("scrolled");
+  }
+}
+
+window.addEventListener("scroll", updateHeaderState, { passive: true });
+window.addEventListener("resize", updateHeaderState);
+updateHeaderState(); /* 刷新时可能停在页面中间，先同步一次状态 */
+
 hamburger.addEventListener("click", function () {
   const open = mainNav.classList.toggle("open");
   hamburger.classList.toggle("open", open);
@@ -582,3 +606,81 @@ bgm.addEventListener("pause", function () {
   musicToggle.classList.remove("playing");
   localStorage.setItem("wujing-bgm", "off");
 });
+
+/* ---------- 右侧悬浮工具栏：分享网站（复制链接 + toast） ----------
+   优先用 navigator.clipboard（https / localhost 可用）；
+   本地 file:// 或 http 环境没有该 API 时，自动退回 textarea + execCommand，
+   保证任何情况下都不报错、都能复制。 */
+var SHARE_URL = "https://www.wujingcn.top";
+
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise(function (resolve, reject) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    var ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (err) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error("copy failed"));
+  });
+}
+
+var copyToast = document.getElementById("copyToast");
+var toastTimer = null;
+
+/* 页面正中弹出提示，2 秒后自动消失（连续点击会重新计时） */
+function showToast(message) {
+  if (!copyToast) return;
+  copyToast.textContent = message;
+  copyToast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
+    copyToast.classList.remove("show");
+    toastTimer = null;
+  }, 2000);
+}
+
+var shareBtn = document.getElementById("shareBtn");
+if (shareBtn) {
+  shareBtn.addEventListener("click", function () {
+    copyText(SHARE_URL).then(function () {
+      showToast("链接已复制：" + SHARE_URL);
+    }).catch(function () {
+      showToast("复制失败，请手动复制：" + SHARE_URL);
+    });
+  });
+}
+
+/* ---------- 右侧悬浮工具栏：回到顶部（仅在向下滚动 400px 后出现） ---------- */
+var toolTop = document.getElementById("toolTop");
+
+function updateToolTop() {
+  if (!toolTop) return;
+  toolTop.classList.toggle("show", window.scrollY > 400);
+}
+
+/* passive 监听 + 只读 scrollY 切 class，开销可忽略，故不做节流 */
+window.addEventListener("scroll", updateToolTop, { passive: true });
+
+window.addEventListener("resize", updateToolTop);
+updateToolTop();
+
+if (toolTop) {
+  toolTop.addEventListener("click", function () {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+}
