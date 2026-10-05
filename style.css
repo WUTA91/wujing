@@ -214,12 +214,10 @@ section[id] {
   height: 28px;
   width: auto;
   display: block;
-  mix-blend-mode: multiply;
 }
 
 html[data-theme="dark"] .logo-img {
   filter: invert(1);
-  mix-blend-mode: lighten;
 }
 
 /* 中间导航链接 */
@@ -397,12 +395,10 @@ html[data-theme="dark"] .hero-services i {
   height: clamp(56px, 9vw, 92px);
   width: auto;
   display: block;
-  mix-blend-mode: multiply;
 }
 
 html[data-theme="dark"] .hero-logo img {
   filter: invert(1);
-  mix-blend-mode: lighten;
 }
 
 .hero-tagline {
