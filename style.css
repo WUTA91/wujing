@@ -394,6 +394,7 @@ html[data-theme="dark"] .hero-services i {
 .hero-logo img {
   height: clamp(56px, 9vw, 92px);
   width: auto;
+  max-width: 100%;
   display: block;
 }
 
