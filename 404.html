@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 · 页面不存在 | WUJING ·無境</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("wujing-theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .not-found {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .not-found h1 { font-size: 72px; margin-bottom: 8px; }
+    .not-found p { color: var(--text-3); margin-bottom: 24px; }
+    .not-found a {
+      display: inline-block;
+      padding: 10px 24px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="not-found">
+    <div>
+      <h1>404</h1>
+      <p>前面的道路，以后再来探索吧~喵(^ω^)</p>
+      <a href="index.html">回到首页</a>
+    </div>
+  </main>
+</body>
+</html>
