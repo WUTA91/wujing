@@ -436,7 +436,7 @@ html[data-theme="dark"] .hero-logo img {
 
 /* ========== 06 章节通用 ========== */
 .section {
-  padding: 88px 0;
+  padding: 120px 0;
 }
 
 /* 交替背景块（灰银） */
@@ -1550,6 +1550,7 @@ html[data-theme="dark"] .copy-toast {
   font-size: 14px;
   line-height: 1.7;
   color: var(--text-2);
+  white-space: pre-line;
 }
 
 .modal-detail {
@@ -1560,6 +1561,7 @@ html[data-theme="dark"] .copy-toast {
   line-height: 1.8;
   color: var(--text-2);
   text-align: left;
+  white-space: pre-line;
 }
 
 .modal-detail-placeholder {
@@ -1704,4 +1706,43 @@ html[data-theme="dark"] .copy-toast {
 .modal-enter svg {
   width: 15px;
   height: 15px;
+}
+
+/* ========== 页面顶部加载进度条 ========== */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #555, #999);
+  z-index: 9999;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+html[data-theme="dark"] #progress-bar {
+  background: linear-gradient(90deg, #aaa, #eee);
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
+}
+#progress-bar.done {
+  opacity: 0;
+  width: 100% !important;
+}
+
+/* ========== 成员卡片 hover 增强 ========== */
+.member-card {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+html[data-theme="dark"] .member-card:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+.member-card:hover .member-avatar {
+  transform: scale(1.08);
+}
+.member-avatar {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
